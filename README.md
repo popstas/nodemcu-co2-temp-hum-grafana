@@ -23,6 +23,7 @@ Get firmware from https://nodemcu-build.com/ with modules:
 - dht
 - file
 - gpio
+- mqtt
 - net
 - node
 - pwm
@@ -34,13 +35,23 @@ Get firmware from https://nodemcu-build.com/ with modules:
 esptool.py --port COM3 write_flash 0x00000 /path/to/nodemcu_float.bin
 ```
 
-## Set Wifi credentials
-Open `start.lua` and change wifi ssid and password.
+Or compile it, using `user_modules.h`.
+
+
+## Set Wifi and MQTT credentials
+Copy `config-secrets.default.lua` to `config-secrets.lua` and fill your credentials.
 
 ## Upload 
 I am just open all lua files in ESPlorer and upload it, `init.lua` should be uploaded last.
 
+Or you can install `nodemcu-tool`, change port address in `Makefile` and call `make` from project root:
+```
+make upload_all
+```
+
 # Setup other
+All docs below is obsolete after @418f481.
+
 I am using it with Grafana, Telegraf and InfluxDB.
 
 ## Generate json

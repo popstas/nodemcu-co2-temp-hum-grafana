@@ -1,11 +1,7 @@
-print("START")
+print("free:", node.heap())
 startup_timeout = 1000
 
-uart.setup(0, 9600, 8, 0, 1, 1 )
-gpio.mode(3, gpio.OUTPUT)
-gpio.write(3,gpio.LOW)
-SETUP_PARAM={SDA=4, SCL=3, OW_PIN=2, OW_COUNT=2, PWR_PIN=6}
---tmr.alarm(0, 10000, 0, function()  dofile("start.lua") end)
+uart.setup(0, 115200, 8, 0, 1, 1 )
 
 function abortInit()
     -- initailize abort boolean flag
@@ -32,7 +28,36 @@ function startup()
         end
     -- otherwise, start up
     print('in startup')
-    dofile('start.lua')
+    compileFiles()
+    dofile('start.lc')
+end
+
+function compileFiles()
+    local compileAndRemoveIfNeeded = function(f)
+       if file.open(f) then
+          file.close()
+          print('Compiling:', f)
+          node.compile(f)
+          file.remove(f)
+          collectgarbage()
+       end
+    end
+    
+    local serverFiles = {
+        'http-request.lua',
+        'start.lua',
+        'ota.lua',
+        'config-secrets.lua',
+        'wifi.lua',
+        'mqtt.lua',
+        'dht.lua',
+        'co2.lua'
+    }
+    for i, f in ipairs(serverFiles) do compileAndRemoveIfNeeded(f) end
+
+    compileAndRemoveIfNeeded = nil
+    serverFiles = nil
+    collectgarbage()
 end
 
 tmr.alarm(0,1000,0,abortInit)           -- call abortInit after 1s
