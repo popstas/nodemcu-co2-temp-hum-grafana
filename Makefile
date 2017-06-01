@@ -11,7 +11,7 @@ SPEED=115200
 # End of user config
 ######################################################################
 LUA_FILES := \
-    init.lua
+    init.lua \
     config-secrets.lua \
     wifi.lua \
     http-request.lua \
@@ -23,13 +23,13 @@ LUA_FILES := \
 
 # Print usage
 usage:
-    @echo "make upload FILE:=<file>  to upload a specific file (i.e make upload FILE:=init.lua)"
-    @echo "make upload_all           to upload all"
+	@echo "make upload FILE:=<file>  to upload a specific file (i.e make upload FILE:=init.lua)"
+	@echo "make upload_all           to upload all"
 
 # Upload one files only
 upload:
-    $(NODEMCU-UPLOADER) -b $(SPEED) -p $(PORT) upload $(FILE)
+	$(NODEMCU-UPLOADER) -b $(SPEED) -p $(PORT) upload $(FILE)
 
 # Upload all
 upload_all: $(LUA_FILES)
-    $(NODEMCU-UPLOADER) -b $(SPEED) -p $(PORT) upload $(foreach f, $^, $(f))
+	$(NODEMCU-UPLOADER) -b $(SPEED) -p $(PORT) upload $(foreach f, $^, $(f))
