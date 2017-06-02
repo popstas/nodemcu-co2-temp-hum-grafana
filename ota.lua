@@ -60,6 +60,11 @@ local function health_controller(conn, req, args)
     resp = resp .. "Chip ID: " .. node.chipid() .. "\n"
     resp = resp .. "Uptime: " .. tmr.time() .. "\n\n"
 
+    if mqttClient then
+        resp = resp .. "# Device MQTT::\n"
+        resp = resp .. mqttClient:get_last() .. "\n"
+    end
+
     local free, used, total = file.fsinfo()
     resp = resp .. "# File system:\n"
     resp = resp .. "Total: " .. total .. "\n"

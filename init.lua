@@ -27,7 +27,6 @@ function startup()
         return
         end
     -- otherwise, start up
-    print('in startup')
     compileFiles()
     dofile('start.lc')
 end
