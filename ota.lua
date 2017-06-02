@@ -1,7 +1,32 @@
+local telnet_srv
+local telnet_port = 2323
+
 local function http_response(conn, code, content)
     local codes = { [200] = "OK", [400] = "Bad Request", [404] = "Not Found", [500] = "Internal Server Error", }
     conn:send("HTTP/1.0 "..code.." "..codes[code].."\r\nServer: nodemcu-ota\r\nContent-Type: text/plain\r\nConnection: close\r\n\r\n"..content)
     --
+end
+
+-- https://github.com/nodemcu/nodemcu-firmware/blob/master/lua_examples/telnet.lua
+local function telnet_start()
+    telnet_srv = net.createServer(net.TCP, 180)
+    telnet_srv:listen(telnet_port, function(socket)
+        local fifo = {} local fifo_drained = true
+        local function sender(c)
+            if #fifo > 0 then c:send(table.remove(fifo, 1)) else fifo_drained = true end
+        end
+
+        local function s_output(str)
+            table.insert(fifo, str)
+            if socket ~= nil and fifo_drained then fifo_drained = false sender(socket) end
+        end
+
+        node.output(s_output, 0)
+        socket:on("receive", function(c, l) node.input(l) end)
+        socket:on("disconnection", function(c) node.output(nil) end)
+        socket:on("sent", sender)
+        print(dev_name)
+    end)
 end
 
 local function ota_controller(conn, req, args)
@@ -54,9 +79,16 @@ local function dofile_controller(conn, req, args)
 end
 
 
+local function telnet_controller(conn, req, args)
+    print("Received HTTP: telnet")
+    if not telnet_srv then telnet_start() end
+    http_response(conn, 200, "telnet started at port: " .. telnet_port)
+end
+
+
 local function restart_controller(conn, req, args)
     http_response(conn, 200, "restarting...")
-    print("received restart signal over http")
+    print("Received HTTP: restart")
     tmr.alarm(0, 1000, tmr.ALARM_SINGLE, function()
         conn:close()
         node.restart()
@@ -107,6 +139,8 @@ local function onReceive(conn, payload)
         ota_controller(conn, req, req.uri.args)
     elseif req.uri.file == "http/dofile" then
         dofile_controller(conn, req, req.uri.args)
+    elseif req.uri.file == "http/telnet" then
+        telnet_controller(conn, req, req.uri.args)
     elseif req.uri.file == "http/restart" and req.method == "POST" then
         restart_controller(conn, req, req.uri.args)
     elseif req.uri.file == "http/health" then
