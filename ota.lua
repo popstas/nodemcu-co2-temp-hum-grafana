@@ -44,6 +44,16 @@ local function ota_controller(conn, req, args)
 end
 
 
+local function dofile_controller(conn, req, args)
+    local filename = req.getRequestData().filename
+    local msg = "dofile(" .. filename .. ")"
+    print("Received HTTP: " .. msg)
+    http_response(conn, 200, msg)
+    dofile(filename)
+    msg = nil
+end
+
+
 local function restart_controller(conn, req, args)
     http_response(conn, 200, "restarting...")
     print("received restart signal over http")
@@ -95,14 +105,14 @@ local function onReceive(conn, payload)
 
     if req.uri.file == "http/ota" then
         ota_controller(conn, req, req.uri.args)
-    end
-
-    if req.uri.file == "http/restart" and req.method == "POST" then
+    elseif req.uri.file == "http/dofile" then
+        dofile_controller(conn, req, req.uri.args)
+    elseif req.uri.file == "http/restart" and req.method == "POST" then
         restart_controller(conn, req, req.uri.args)
-    end
-
-    if req.uri.file == "http/health" then
+    elseif req.uri.file == "http/health" then
         health_controller(conn, req, req.uri.args)
+    else
+        http_response(conn, 400, "Unknown command")
     end
 
     req = nil
