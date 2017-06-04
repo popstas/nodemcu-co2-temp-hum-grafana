@@ -1,18 +1,19 @@
 -- Variables --
-dev_name         = "Temperature, humidity, CO2 sensor"
+dev_name         = "Temperature, humidity, CO2, light sensor"
 mqtt_topic       = "home/room"
-mqtt_name        = "temp-hum-co2-room"
+mqtt_name        = "temp-hum-co2-light-room"
 mqtt_host        = "home.popstas.ru"
 sensor_interval  = 10000
 dht_pin          = 2
 co2_pin          = 1
+hostname         = "room-sensors"
 
 dofile("config-secrets.lc")
 mqttClient = dofile('mqtt.lc')
 
 if node_started then node.restart() end -- restart when included after start
 
-dofile('wifi.lc')(wifi_ssid, wifi_password)
+dofile('wifi.lc')(wifi_ssid, wifi_password, hostname)
 collectgarbage()
 
 wifi.eventmon.register(wifi.eventmon.STA_GOT_IP, function(T)
