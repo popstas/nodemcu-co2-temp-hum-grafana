@@ -50,7 +50,8 @@ function compileFiles()
         'wifi.lua',
         'mqtt.lua',
         'dht.lua',
-        'co2.lua'
+        'co2.lua',
+        'light.lua'
     }
     for i, f in ipairs(serverFiles) do compileAndRemoveIfNeeded(f) end
 

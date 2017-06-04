@@ -4,8 +4,7 @@ Sensor that outputs:
 
 - co2 from MH-Z19 sensor
 - temperature and humidity from DHT11 sensor
-
-Sensor broadcasts at UDP 6650.
+- light from GL5528 resistor
 
 This is modification of project [http://www.crystalairfresh.ucoz.net](http://www.crystalairfresh.ucoz.net/publ/dlja_samostojatelnoj_sborki/opisanie_pribora/prostoj_pribor_izmerenija_so2_temperatury_i_vlazhnosti/6-1-0-12)
 
@@ -14,12 +13,14 @@ This is modification of project [http://www.crystalairfresh.ucoz.net](http://www
 # Wiring
 - Connect MH-Z19 to pin 1 and 5v
 - Connect DHT11 to pin 2 and 5v
+- Connect light resistor to A0 (not so easy, don't want to explain)
 
 # Setup nodemcu
 
 ## Flash firmware
 Get firmware from https://nodemcu-build.com/ with modules:
 
+- adc
 - dht
 - file
 - gpio

@@ -20,6 +20,7 @@ LUA_FILES := \
     mqtt.lua \
     dht.lua \
     co2.lua \
+    light.lua \
 
 # Print usage
 usage:
