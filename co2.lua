@@ -19,7 +19,9 @@ local function pin1cb(level)
     end
 
     if c > 3 then gpio.mode(1, gpio.INPUT)
+        ppm = math.floor(ppm)
         print('co2:', ppm)
+        print("")
         mqttClient:publish('co2', math.floor(ppm))
         return ppm
     end
