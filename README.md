@@ -14,6 +14,7 @@ This is modification of project [http://www.crystalairfresh.ucoz.net](http://www
 - Connect MH-Z19 to pin 1 and 5v
 - Connect DHT11 to pin 2 and 5v
 - Connect light resistor to A0 (not so easy, don't want to explain)
+- Connect PMS7003: SET to D6, RX to TX, TX to RX
 
 # Setup nodemcu
 

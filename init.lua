@@ -1,7 +1,7 @@
 print("free:", node.heap())
 startup_timeout = 1000
 
-uart.setup(0, 115200, 8, 0, 1, 1 )
+uart.setup(0, 9600, 8, 0, 1, 1 )
 
 function abortInit()
     -- initailize abort boolean flag
