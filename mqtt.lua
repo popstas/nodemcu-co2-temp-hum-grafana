@@ -8,10 +8,16 @@ function mqttClient:connect()
     mqttClient.client:connect(
         mqtt_host, 1883, 0, 0,
         function(client) print("mqtt connected") end,
-        function(client, reason) print("mqtt connect failed, reason: "..reason) end
+        function(client, reason)
+            print("mqtt connect failed, reason: "..reason..", restarting")
+            node.restart()
+        end
     )
     
-    mqttClient.client:on("offline", function(client) print ("mqtt offline") end)
+    mqttClient.client:on("offline", function(client)
+        print ("mqtt offline, restarting")
+        node.restart()
+    end)
 end
 
 function mqttClient:get_last()
