@@ -4,9 +4,9 @@ mqttClient.client = mqtt.Client(mqtt_name, 30, mqtt_login, mqtt_password)
 mqttClient.last = {}
 
 function mqttClient:connect()
-    print("mqtt connect to "..mqtt_host.."...")
+    print("connect to mqtt " .. mqtt_host .. "...")
     mqttClient.client:connect(
-        mqtt_host, 1883, 0, 1,
+        mqtt_host, 1883, 0, 0,
         function(client) print("mqtt connected") end,
         function(client, reason) print("mqtt connect failed, reason: "..reason) end
     )
@@ -23,8 +23,8 @@ function mqttClient:get_last()
 end
 
 function mqttClient:publish(subtopic, value)
-    mqttClient.client:publish(mqtt_topic.."/"..subtopic, value, 0, 0)
-    mqttClient.last[mqtt_topic.."/"..subtopic] = value
+    mqttClient.client:publish(mqtt_topic .. "/" .. subtopic, value, 0, 0)
+    mqttClient.last[mqtt_topic .. "/" .. subtopic] = value
 end
 
 return mqttClient

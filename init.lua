@@ -1,7 +1,7 @@
 print("free:", node.heap())
 startup_timeout = 1000
 
-uart.setup(0, 9600, 8, 0, 1, 1 )
+--uart.setup(0, 115200, 8, 0, 1, 1 )
 
 function abortInit()
     -- initailize abort boolean flag
@@ -49,9 +49,10 @@ function compileFiles()
         'config-secrets.lua',
         'wifi.lua',
         'mqtt.lua',
-        'dht.lua',
         'co2.lua',
+        'dht.lua',
         'light.lua'
+        --'bme280.lua'
     }
     for i, f in ipairs(serverFiles) do compileAndRemoveIfNeeded(f) end
 

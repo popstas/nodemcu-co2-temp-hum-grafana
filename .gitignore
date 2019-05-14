@@ -1,2 +1,3 @@
 config-secrets.lua
 .ota
+node_modules/
